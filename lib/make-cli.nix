@@ -47,10 +47,14 @@ in
         #!/usr/bin/env bash
         set -euo pipefail
 
+        PROJECT_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+
         # Nice gray trace output
         export PS4='$(tput setaf 8 2>/dev/null)+ $(tput sgr0 2>/dev/null)'
 
         run_cmd() {
+          cd "$PROJECT_ROOT" || exit 1
+
           case "$1" in
             ${builtins.concatStringsSep "\n" (map genScriptCase scripts)}
             *)
